@@ -23,10 +23,9 @@ defmodule Brcpfcnpj.Changeset do
   @spec validate_cnpj(t, atom, Keyword.t()) :: t
   def validate_cnpj(changeset, field, opts \\ []) when is_atom(field) do
     validate(changeset, field, fn value ->
-      cond do
-        Brcpfcnpj.cnpj_valid?(%Cnpj{number: value}) -> []
-        true -> [{field, message(opts, "Invalid Cnpj")}]
-      end
+      if Brcpfcnpj.cpf_valid?(%Cpf{number: value}),
+        do: [],
+        else: [{field, {message(opts, "Invalid Cpf"), []}}]
     end)
   end
 
@@ -42,13 +41,11 @@ defmodule Brcpfcnpj.Changeset do
       validate_cpf(changeset, :cpf)
 
   """
-  @spec validate_cpf(t, atom, Keyword.t()) :: t
   def validate_cpf(changeset, field, opts \\ []) when is_atom(field) do
     validate(changeset, field, fn value ->
-      cond do
-        Brcpfcnpj.cpf_valid?(%Cpf{number: value}) -> []
-        true -> [{field, message(opts, "Invalid Cpf")}]
-      end
+      if Brcpfcnpj.cpf_valid?(%Cpf{number: value}),
+        do: [],
+        else: [{field, {message(opts, "Invalid Cpf"), []}}]
     end)
   end
 
