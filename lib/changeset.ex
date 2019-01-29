@@ -25,9 +25,9 @@ defmodule Brcpfcnpj.Changeset do
   @spec validate_cnpj(map, atom, Keyword.t()) :: map
   def validate_cnpj(changeset, field, opts \\ []) when is_atom(field) do
     validate_change(changeset, field, fn _, value ->
-      if Brcpfcnpj.cpf_valid?(%Cpf{number: value}),
+      if Brcpfcnpj.cnpj_valid?(%Cnpj{number: value}),
         do: [],
-        else: [{field, {message(opts, "Invalid Cpf"), []}}]
+        else: [{field, {message(opts, "Invalid Cnpj"), []}}]
     end)
   end
 
