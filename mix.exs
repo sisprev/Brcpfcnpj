@@ -20,7 +20,8 @@ defmodule Brcpfcnpj.Mixfile do
     [
       {:earmark, "~> 1.2", only: :dev, runtime: false},
       {:ex_doc, "~> 0.18.0", only: :dev, runtime: false},
-      {:inch_ex, "~> 0.5.6", only: :docs, runtime: false}
+      {:inch_ex, "~> 0.5.6", only: :docs, runtime: false},
+      {:ecto, "~> 3.0"}
     ]
   end
 
