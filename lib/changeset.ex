@@ -3,7 +3,7 @@ defmodule Brcpfcnpj.Changeset do
   Define funções para serem utilizadas em conjunto com a API de changeset do Ecto.
   """
 
-  import Ecto.Changeset, only: [validate_change: 3]
+  import Ecto.Changeset, only: [validate_change: 3, get_field: 2]
 
   @type t :: %{valid?: boolean(), changes: %{atom => term}, errors: [error]}
 
@@ -22,13 +22,19 @@ defmodule Brcpfcnpj.Changeset do
       validate_cnpj(changeset, :cnpj)
 
   """
-  @spec validate_cnpj(map, atom, Keyword.t()) :: map
+  @spec validate_cnpj(Ecto.Changeset.t(), atom, Keyword.t()) :: Ecto.Changeset.t()
   def validate_cnpj(changeset, field, opts \\ []) when is_atom(field) do
-    validate_change(changeset, field, fn _, value ->
-      if Brcpfcnpj.cnpj_valid?(%Cnpj{number: value}),
-        do: [],
-        else: [{field, {message(opts, "Invalid Cnpj"), []}}]
-    end)
+    case get_field(changeset, :cnpj) do
+      nil ->
+        changeset
+
+      __ ->
+        validate_change(changeset, field, fn _, value ->
+          if Brcpfcnpj.cnpj_valid?(%Cnpj{number: value}),
+            do: [],
+            else: [{field, {message(opts, "Invalid Cnpj"), []}}]
+        end)
+    end
   end
 
   @doc """
@@ -43,7 +49,7 @@ defmodule Brcpfcnpj.Changeset do
       validate_cpf(changeset, :cpf)
 
   """
-  @spec validate_cpf(map, atom, Keyword.t()) :: map
+  @spec validate_cpf(Ecto.Changeset.t(), atom, Keyword.t()) :: Ecto.Changeset.t()
   def validate_cpf(changeset, field, opts \\ []) when is_atom(field) do
     validate_change(changeset, field, fn _, value ->
       if Brcpfcnpj.cpf_valid?(%Cpf{number: value}),
